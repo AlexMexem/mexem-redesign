@@ -1,74 +1,5 @@
-(() => {
-  var __async = (__this, __arguments, generator) => {
-    return new Promise((resolve, reject) => {
-      var fulfilled = (value) => {
-        try {
-          step(generator.next(value));
-        } catch (e) {
-          reject(e);
-        }
-      };
-      var rejected = (value) => {
-        try {
-          step(generator.throw(value));
-        } catch (e) {
-          reject(e);
-        }
-      };
-      var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-      step((generator = generator.apply(__this, __arguments)).next());
-    });
-  };
-
-  // env-ns:env
-  var MEXEM_API_KEY = "GQctPdXhHOreo";
-
-  // src/scripts/channel.js
-  document.addEventListener("DOMContentLoaded", function() {
-    let playlistNavs = document.querySelectorAll(".news-playlist-nav");
-    [...playlistNavs].forEach((button) => {
-      button.addEventListener("click", switchPlaylist);
-    });
-    loadPlaylist("PLYXblLTStn53lv1nW7j5ebG-QJCyv1zHm");
-  });
-  function loadPlaylist(playlistId) {
-    return __async(this, null, function* () {
-      let playlist = document.querySelector("[data-video-playlist]");
-      let videoItem = document.querySelector("[data-video-item]");
-      let videoClone = videoItem.cloneNode(true);
-      playlist.replaceChildren();
-      let res = yield fetchVideos(playlistId);
-      let videoPlayer = document.querySelector("[data-youtube-player]");
-      videoPlayer.src = updateYoutubeLink(res[0].youtubeLink);
-      res.forEach((item) => {
-        let newItem = videoClone.cloneNode(true);
-        let videoThump = newItem.querySelector("[data-video-thump]");
-        let videoTitle = newItem.querySelector("[data-video-title]");
-        let videoDetails = newItem.querySelector("[data-video-details]");
-        newItem.addEventListener("click", updateVideoPlayer);
-        newItem.dataset.youtubeLink = updateYoutubeLink(item.youtubeLink);
-        videoTitle.innerText = item.title;
-        videoThump.src = item.thumbnails.high;
-        videoDetails.innerHTML = ` <span> ${item.statistics.channelTitle} \u2022 </span>${item.statistics.viewCount} Views <span> \u2022 </span> ${item.statistics.duration} `;
-        playlist.append(newItem);
-      });
-    });
-  }
-  function updateYoutubeLink(link) {
-    return link.replace("watch?v=", "embed/");
-  }
-  function fetchVideos(playlistId) {
-    return __async(this, null, function* () {
-      let api = "https://api.mexemnews.com/graphql";
-      let response = yield fetch(api, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Mexem-API": MEXEM_API_KEY
-        },
-        body: JSON.stringify({
-          query: `{
-        getVideosByPlaylist(playlistId: "${playlistId}") {
+(()=>{var d=(e,s,a)=>new Promise((l,t)=>{var m=r=>{try{o(a.next(r))}catch(i){t(i)}},n=r=>{try{o(a.throw(r))}catch(i){t(i)}},o=r=>r.done?l(r.value):Promise.resolve(r.value).then(m,n);o((a=a.apply(e,s)).next())});var p="GQctPdXhHOreo";document.addEventListener("DOMContentLoaded",function(){[...document.querySelectorAll(".news-playlist-nav")].forEach(s=>{s.addEventListener("click",R)}),C("PLYXblLTStn53lv1nW7j5ebG-QJCyv1zHm")});function C(e){return d(this,null,function*(){let s=document.querySelector("[data-video-playlist]"),l=document.querySelector("[data-video-item]").cloneNode(!0);s.replaceChildren();let t=yield S(e),m=document.querySelector("[data-youtube-player]");m.src=c(t[0].youtubeLink),t.forEach(n=>{let o=l.cloneNode(!0),r=o.querySelector("[data-video-thump]"),i=o.querySelector("[data-video-title]"),E=o.querySelector("[data-video-details]");o.addEventListener("click",D),o.dataset.youtubeLink=c(n.youtubeLink),i.innerText=n.title,r.src=n.thumbnails.high,E.innerHTML=` <span> ${n.statistics.channelTitle} \u2022 </span>${n.statistics.viewCount} Views <span> \u2022 </span> ${n.statistics.duration} `,s.append(o)})})}function c(e){return e.replace("watch?v=","embed/")}function S(e){return d(this,null,function*(){return(yield(yield fetch("https://api.mexemnews.com/graphql",{method:"POST",headers:{"Content-Type":"application/json","Mexem-API":p},body:JSON.stringify({query:`{
+        getVideosByPlaylist(playlistId: "${e}") {
             youtubeLink
             title
             thumbnails {
@@ -81,23 +12,4 @@
               viewCount
             }  
         }
-      }`
-        })
-      });
-      let data = yield response.json();
-      return data.data.getVideosByPlaylist;
-    });
-  }
-  function updateVideoPlayer(e) {
-    let videoPlayer = document.querySelector("[data-youtube-player]");
-    videoPlayer.src = e.currentTarget.dataset.youtubeLink;
-  }
-  function switchPlaylist(e) {
-    let playlistNavs = document.querySelectorAll(".news-playlist-nav");
-    loadPlaylist(e.currentTarget.dataset.playlistId);
-    [...playlistNavs].forEach((button) => {
-      button.classList.remove("active");
-    });
-    e.currentTarget.classList.add("active");
-  }
-})();
+      }`})})).json()).data.getVideosByPlaylist})}function D(e){let s=document.querySelector("[data-youtube-player]");s.src=e.currentTarget.dataset.youtubeLink}function R(e){let s=document.querySelectorAll(".news-playlist-nav");C(e.currentTarget.dataset.playlistId),[...s].forEach(a=>{a.classList.remove("active")}),e.currentTarget.classList.add("active")}})();
